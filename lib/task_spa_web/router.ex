@@ -21,10 +21,12 @@ defmodule TaskSpaWeb.Router do
     get "/tasks", PageController, :index
   end
 
-  scope "/api", TaskSpaWeb do
+  scope "/api/v1", TaskSpaWeb do
     pipe_through :api
 
+    resources "/sessions", SessionController, only: [:create, :delete]
+
     resources "/users", UserController, except: [:new, :edit]
-    resources "/tasks", TaskController, except: [:new, :edit]
+    resources "/tasks", TaskController
   end
 end

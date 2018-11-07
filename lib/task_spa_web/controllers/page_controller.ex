@@ -10,7 +10,7 @@ defmodule TaskSpaWeb.PageController do
   def show_task(task) do
     user_name = task.user.name
     task
-    |> Map.take([:name, :description, :completed])
+    |> Map.take([:name, :description, :completed, :time])
     |> Map.put(:user_name, user_name)
   end
 end

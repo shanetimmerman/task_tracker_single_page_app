@@ -1,1 +1,63 @@
+// $body-bg: #BBB; // With scss, Bootstrap lets us override colors and stuff.
+
 @import "~bootstrap/scss/bootstrap";
+
+.new-form {
+    font-size: 20px;
+}
+
+.large-checkbox {
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    margin-left: 50px;
+}
+
+.check-group {
+    display: flex;
+    align-content: center;
+}
+
+.card {
+    border-radius: 25px;
+    width: 18rem;
+    overflow-wrap:break-word;
+    /* // shadow styling form w3schools.com */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.margins-20 {
+    margin: 20px;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.button-spacing {
+    display: flex;
+    justify-content: space-around;
+}
+
+#card-container {
+    padding-bottom: 100px;
+}
+
+.or {
+    margin: 30px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.back-button {
+    margin-top: 20px;
+}
+
+.cancel-link {
+    color: red;
+}

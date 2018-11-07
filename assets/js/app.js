@@ -9,7 +9,6 @@
 //
 // Import dependencies
 //
-import "phoenix_html";
 import jQuery from 'jquery';
 window.jQuery = window.$ = jQuery;
 import "bootstrap";
@@ -22,8 +21,9 @@ import _ from "lodash";
 // import socket from "./socket"
 
 import root_init from "./root";
+import store from './store';
 
 $(() => {
   let node = $('#root')[0];
-  root_init(node);
+  root_init(node, store);
 });

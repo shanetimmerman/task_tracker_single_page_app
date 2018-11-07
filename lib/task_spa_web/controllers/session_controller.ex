@@ -11,6 +11,7 @@ defmodule TaskSpaWeb.SessionController do
           data: %{
             token: Phoenix.Token.sign(TaskSpaWeb.Endpoint, "user_id", user.id),
             user_id: user.id,
+            user_name: user.name,
           }
         }
   
@@ -18,5 +19,9 @@ defmodule TaskSpaWeb.SessionController do
         |> put_resp_header("content-type", "application/json; charset=UTF-8")
         |> send_resp(:created, Jason.encode!(resp))
       end
+    end
+
+    def delete(conn, _params) do
+      send_resp(conn, :no_content, "")
     end
   end
