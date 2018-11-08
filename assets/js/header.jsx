@@ -7,14 +7,6 @@ import api from './api';
 
 function Header(props) {
     let {session} = props
-    
-    let in_register = window.location.pathname.includes("/new_user");
-    
-    let register_butt;
-
-    if (!in_register) {
-        register_butt = <p><Link className="btn btn-info" to="/new_user" >Register</Link></p>
-    }
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -30,7 +22,7 @@ function Header(props) {
     if (session) {
         login = 
             <div>
-                <p>Logged in as {session.user_name}</p>
+                <p className="text-muted btn">Logged in as {session.user_name}</p>
                 <button className="btn btn-secondary" 
                     onClick={() => api.delete_session()}>Logout</button>
             </div>    
@@ -39,8 +31,10 @@ function Header(props) {
             <form className="form-inline" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Username" />
                 <input type="password" placeholder="Password" />
-                <button type="submit" className="btn btn-secondary" >Login</button>
-                {register_butt}
+                <div className="form-group" >
+                    <button type="submit" className="btn btn-default btn-secondary" >Login</button>
+                    <Link className="btn btn-default btn-info" to="/new_user" >Register</Link>
+                </div>
             </form>
     }
     return <div className="row my-2">
@@ -54,7 +48,6 @@ function Header(props) {
 }
 
 function state2props(state) {
-    console.log("rerender", state);
     return {
       session: state.session,
     };

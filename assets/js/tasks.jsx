@@ -12,7 +12,7 @@ function TaskList(props) {
 
     <div className="card-columns" style={{"columnCount": 3}}>
       {tasks}
-    </div>  
+    </div>
   </div>;
 }
 
@@ -20,12 +20,12 @@ function Task(props) {
   let {task, users, session} = props;
   let filtered_users = _.filter(users, (user) => user.name != task.user_name)
   let user_options = _.map(filtered_users, (user) =>
-    <button className="dropdown-item" type="button" key={`task${task.id}_dropdown_user${user.id}`} 
-        onClick={() => api.update_task_user(task.id, user.id)}>
+    <button className="dropdown-item" type="button" key={`task${task.id}_dropdown_user${user.id}`}
+        onClick={() => api.update_task_user(task.id, user.id, session.token)}>
       {user.name}
     </button>
   );
-  
+
   let isMine = (!session || session.user_name != task.user_name)
 
   return <div className="card">
@@ -33,9 +33,9 @@ function Task(props) {
       <h2 className="card-title">{task.name}</h2>
       <p className="card-text">{task.description} <br/>
                                Time: {task.time}</p>
-      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time)} disabled={isMine} >+</button>
-      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time)} disabled={isMine || task.time < 15} >-</button>
-      
+      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time, session.token)} disabled={isMine} >+</button>
+      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time, session.token)} disabled={isMine || task.time < 15} >-</button>
+
       <p className="card-text">Assigned to:</p>
       <div className="btn-group">
         <button type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={!session}>
@@ -50,14 +50,14 @@ function Task(props) {
 
     <div className="card-body">
       <div className="custom-control custom-checkbox">
-        <input type="checkbox" className="form-check-input custom-control-input" id={`customCheck${task.id}`} checked={task.completed} onChange={() => api.complete_task(task.id, !task.completed)} disabled={isMine} />
+        <input type="checkbox" className="form-check-input custom-control-input" id={`customCheck${task.id}`} checked={task.completed} onChange={() => api.complete_task(task.id, !task.completed, session.token)} disabled={isMine} />
         <label className="custom-control-label" htmlFor={`customCheck${task.id}`}>Mark as Completed</label>
       </div>
     </div>
 
     <div className="card-body">
       <Link to={`/tasks/${task.id}`} disabled={isMine} ><button className="btn btn-primary" disabled={isMine} >Edit task</button></Link>
-      <button className="btn btn-danger" onClick={() => api.delete_task(task.id)} disabled={isMine} >Delete</button>
+      <button className="btn btn-danger" onClick={() => api.delete_task(task.id, session.token)} disabled={isMine} >Delete</button>
     </div>
   </div>;
 }

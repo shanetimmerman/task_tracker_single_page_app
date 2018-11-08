@@ -79,7 +79,12 @@ function NewTaskForm(props) {
       <Link to="/" onClick={() => {
           handleSubmit();
         }}
-        className="btn btn-secondary" >Submit</Link>
+        className="btn btn-primary" >Create Task</Link>
+      <Link to="/" className="btn btn-secondary" >Save and cancel</Link>
+      <Link to="/" onClick={() => {
+          api.clear_new_task_form();
+        }}
+        className="btn btn-danger" >Cancel</Link>
     </div>
   </form>
 }

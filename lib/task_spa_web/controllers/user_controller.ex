@@ -5,7 +5,7 @@ defmodule TaskSpaWeb.UserController do
   alias TaskSpa.Users.User
 
   action_fallback TaskSpaWeb.FallbackController
-  
+
 
   def index(conn, _params) do
     users = Users.list_users()
@@ -13,10 +13,10 @@ defmodule TaskSpaWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    user_params = Map.put(user_params, 
+    user_params = Map.put(user_params,
                           "password_hash",
                           Argon2.hash_pwd_salt(Map.get(user_params, "password")))
-    |> Map.delete("password") 
+    |> Map.delete("password")
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
@@ -30,12 +30,15 @@ defmodule TaskSpaWeb.UserController do
     render(conn, "show.json", user: user)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def update(conn, %{"id" => id, "user" => user_params, "token" => token}) do
     user = Users.get_user!(id)
-
-    with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
-      render(conn, "show.json", user: user)
-    end
+    case Phoenix.Token.verify(TaskSpaWeb.Endpoint, "user_id", token) do
+      {:ok, _} ->
+        with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
+          render(conn, "show.json", user: user)
+        end
+      _ -> render(conn, "show.json", user: user)
+      end
   end
 
   def delete(conn, %{"id" => id}) do

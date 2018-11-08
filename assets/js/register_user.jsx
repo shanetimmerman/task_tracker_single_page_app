@@ -22,7 +22,7 @@ function RegistrationForm(props) {
   };
   return <form onSubmit={handleSubmit}>      
       <div className="form-group">
-        <label>Name</label>
+        <label>Username</label>
         <input type="text" className="form-control"></input>
       </div>
 

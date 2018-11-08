@@ -8,15 +8,13 @@ import api from './api';
 
 
 function EditTaskForm(props) {
-  console.log(props)
   let session = props.session;
-  console.log(session);
   let { users, tasks, path } = props;
   let id_num = parseInt(window.location.pathname.substring("/tasks/".length));
 
-  // if (!session || tasks.length < id_num ) {
-  //   return <Redirect to={{pathname:"/", state: "Please sign in"}} />
-  // }
+  if (!session || tasks.length < id_num ) {
+    return <Redirect to={{pathname:"/", state: "Please sign in"}} />
+  }
 
   let task = tasks.find((task) => task.id == id_num);
 
@@ -71,17 +69,24 @@ function EditTaskForm(props) {
       <input min={0} step={15} />
     </div>
 
-    <div className="form-group custom-control custom-checkbox">
-      <label>Complete</label>
-      <input type="checkbox" className="custom-control-input" checked={task.completed} />
+    <div className="card-body">
+      <div className="custom-control custom-checkbox">
+        <input type="checkbox" className="form-check-input custom-control-input" id={`customCheckEditTaskPage${task.id}`} checked={task.completed} onChange={() => api.complete_task(task.id, !task.completed, session.token)} />
+        <label className="custom-control-label" htmlFor={`customCheckEditTaskPage${task.id}`}>Mark as Completed</label>
+      </div>
     </div>
 
-    <div>
+    <div className="row container-fluid">
       <Link to="/" onClick={() => {
           handleSubmit();
         }}
         className="btn btn-secondary" >Submit</Link>
+
+        <Link to="/" onClick={() => api.fetch_tasks()} className="btn btn-danger">Cancel</Link>
     </div>
+
+
+
   </form>
 }
 

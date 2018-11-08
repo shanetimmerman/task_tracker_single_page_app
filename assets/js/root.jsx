@@ -24,7 +24,7 @@ class Root extends React.Component {
     super(props);
 
     // TODO Temporarily sign in as default
-    api.create_session('alice', 'pass');
+    // api.create_session('alice', 'pass');
     api.fetch_tasks();
     api.fetch_users();
   }
