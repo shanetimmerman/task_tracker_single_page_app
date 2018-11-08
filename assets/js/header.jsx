@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import api from './api';
 
@@ -21,19 +22,21 @@ function Header(props) {
         login = 
             <div>
                 <p>Logged in as {session.user_name}</p>
-                <button onClick={() => api.delete_session()}>Logout</button>
+                <button className="btn btn-secondary" 
+                    onClick={() => api.delete_session()}>Logout</button>
             </div>    
     } else {
         login = 
-            <form className="form-inline my-2" onSubmit={handleSubmit}>
+            <form className="form-inline my-3" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Username" />
                 <input type="password" placeholder="Password" />
                 <input type="submit" className="btn btn-secondary" />
+                <p><Link className="btn btn-info" to="/new_user" >Register</Link></p>
             </form>
     }
     return <div className="row my-2">
       <div className="col-4">
-        <h1>Task Tracker</h1>
+        <h1><Link to="/" onClick={() => api.fetch_tasks()}>Task Tracker</Link></h1>
       </div> 
       <div className="col-6">
         {login}

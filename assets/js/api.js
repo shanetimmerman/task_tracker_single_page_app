@@ -55,6 +55,16 @@ class TheServer {
 					  })
 	}
 
+	update_task(task_id, data) {
+		this.send_put(`/api/v1/tasks/${task_id}`, 
+					  {task: data},
+					  (resp) => {
+						  store.dispatch({
+							  type: 'UPDATE_TASK',
+							  data: resp.data,
+						  })
+					  })
+	}
 		
 	// Gets all the tasks
 	fetch_tasks() {
@@ -109,6 +119,56 @@ class TheServer {
 
 	decrement_task_time(task_id, time) {
 		this.update_task_time(task_id, Math.max(0, time - 15));
+	}
+
+	update_task_user(task_id, user_id) {
+		this.update_task(task_id, {user_id: user_id});
+	}
+
+	delete_task(task_id) {
+		this.send_delete(
+			`/api/v1/tasks/${task_id}`,
+			"",
+			(resp) => {
+				store.dispatch({
+					type: "DELETE_TASK",
+					data: {task_id: task_id},
+				});
+			}
+		)
+	}
+
+	create_user(username, password) {
+		this.send_post("/api/v1/users",
+					   {user: {name: username, password: password}},
+					   null,
+		);
+
+		this.create_session(username, password);
+		
+		this.fetch_users();
+	}
+
+	update_new_task_form(key, value) {
+		store.dispatch({
+			type: "UPDATE_NEW_TASK_FORM",
+			data: {key: key, 
+				   value: value},
+		})
+	}
+
+	create_task(name, desc, user_id) {
+		this.send_post(
+			"/api/v1/tasks",
+			{task : {
+				name: name,
+				description: desc,
+				user_id: user_id,}},
+			store.dispatch({
+				type: "CLEAR_NEW_TASK_FORM"
+			})
+		);
+		this.fetch_tasks();
 	}
 }
 

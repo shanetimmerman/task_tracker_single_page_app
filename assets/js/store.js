@@ -21,9 +21,12 @@ function tasks(state = [], action) {
   case 'TASK_LIST':
     return action.data;
   case 'UPDATE_TASK':
-    let state1 = state.slice(0);
-    let index = state1.findIndex(task => task.id == action.data.id);
-    state1[index] = action.data
+    let state0 = state.slice(0);
+    let index = state0.findIndex(task => task.id == action.data.id);
+    state0[index] = action.data;
+    return state0;
+  case 'DELETE_TASK':
+    let state1 = _.filter(state, (task) => task.id != action.data.task_id);
     return state1;
   default:
     return state;
@@ -50,12 +53,15 @@ function session(state = null, action) {
   }
 }
 
-function add_task_forms(state = new Map(), action) {
+function new_task_form(state = new Map(), action) {
   switch (action.type) {
-  case 'UPDATE_ADD_CART_FORM':
+  case 'UPDATE_NEW_TASK_FORM':
     let state1 = new Map(state);
-    state1.set(action.task_id);
+    state1.set(action.data.key, action.data.value);
+    console.log('updated state', state1)
     return state1;
+  case 'CLEAR_NEW_TASK_FORM':
+    return new Map();
   default:
     return state;
   }
@@ -64,7 +70,7 @@ function add_task_forms(state = new Map(), action) {
 function root_reducer(state0, action) {
   console.log("reducer", state0, action);
 
-  let reducer = combineReducers({tasks, users, session, add_task_forms});
+  let reducer = combineReducers({tasks, users, session, new_task_form});
   let state1 = reducer(state0, action);
 
   console.log("reducer1", state1);

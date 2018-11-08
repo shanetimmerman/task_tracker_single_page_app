@@ -6,6 +6,7 @@ defmodule TaskSpaWeb.SessionController do
     alias TaskSpa.Users.User
   
     def create(conn, %{"name" => name, "password" => password}) do
+      IO.puts "attempting login"
       with %User{} = user <- TaskSpa.Users.get_and_auth_user(name, password) do
         resp = %{
           data: %{

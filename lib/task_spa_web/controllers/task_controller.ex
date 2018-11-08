@@ -13,6 +13,7 @@ defmodule TaskSpaWeb.TaskController do
 
   def create(conn, %{"task" => task_params}) do
     with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
+      task = Tasks.get_task!(task.id)
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.task_path(conn, :show, task))
@@ -29,6 +30,8 @@ defmodule TaskSpaWeb.TaskController do
     task = Tasks.get_task!(id)
 
     with {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
+      # Reloads the task to get the updated associations
+      task = Tasks.get_task!(id)
       render(conn, "show.json", task: task)
     end
   end

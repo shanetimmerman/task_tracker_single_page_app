@@ -5,6 +5,7 @@ defmodule TaskSpaWeb.UserController do
   alias TaskSpa.Users.User
 
   action_fallback TaskSpaWeb.FallbackController
+  
 
   def index(conn, _params) do
     users = Users.list_users()
@@ -12,6 +13,10 @@ defmodule TaskSpaWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    user_params = Map.put(user_params, 
+                          "password_hash",
+                          Argon2.hash_pwd_salt(Map.get(user_params, "password")))
+    |> Map.delete("password") 
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
       |> put_status(:created)
