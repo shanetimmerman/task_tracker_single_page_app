@@ -22,7 +22,7 @@ function tasks(state = [], action) {
     return action.data;
   case 'UPDATE_TASK':
     let state0 = state.slice(0);
-    let index = state0.findIndex(task => task.id == action.data.id);
+    let index = state0.findIndex((task) => task.id == action.data.id);
     state0[index] = action.data;
     return state0;
   case 'DELETE_TASK':

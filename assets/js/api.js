@@ -108,23 +108,27 @@ class TheServer {
 		this.update_task(task_id, {completed: completed});
 	}
 
-
+	// Sets the task time to the given number
 	update_task_time(task_id, time) {
 		this.update_task(task_id, {time: time});
 	}
 
+	// Increments task time by step
 	increment_task_time(task_id, time) {
 		this.update_task_time(task_id, time + 15);
 	}
 
+	// Decrements task time by step
 	decrement_task_time(task_id, time) {
 		this.update_task_time(task_id, Math.max(0, time - 15));
 	}
 
+	// Changes the user the task is assigned to
 	update_task_user(task_id, user_id) {
 		this.update_task(task_id, {user_id: user_id});
 	}
 
+	// Deletes the task
 	delete_task(task_id) {
 		this.send_delete(
 			`/api/v1/tasks/${task_id}`,
@@ -138,6 +142,7 @@ class TheServer {
 		)
 	}
 
+	// Register a new user
 	create_user(username, password) {
 		this.send_post("/api/v1/users",
 					   {user: {name: username, password: password}},
@@ -149,6 +154,7 @@ class TheServer {
 		this.fetch_users();
 	}
 
+	// Store the form for creating a task
 	update_new_task_form(key, value) {
 		store.dispatch({
 			type: "UPDATE_NEW_TASK_FORM",

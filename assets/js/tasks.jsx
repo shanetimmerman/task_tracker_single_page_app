@@ -7,12 +7,12 @@ import { Redirect, Link } from 'react-router-dom';
 
 function TaskList(props) {
   let tasks = _.map(props.tasks, (task) => <Task key={"task" + task.id} task={task} users={props.users} session={props.session} />);
-  return <div> 
+  return <div>
+    <Link to='/new_task' disabled={!props.session}><button className="btn btn-primary" disabled={!props.session}>Create a new task</button></Link>
+
     <div className="card-columns" style={{"columnCount": 3}}>
       {tasks}
-    </div>
-  
-    <p><Link className="btn btn-primary" to='/new_task' disabled={!props.session}>Create task</Link></p>
+    </div>  
   </div>;
 }
 
@@ -34,7 +34,7 @@ function Task(props) {
       <p className="card-text">{task.description} <br/>
                                Time: {task.time}</p>
       <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time)} disabled={isMine} >+</button>
-      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time)} disabled={isMine} >-</button>
+      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time)} disabled={isMine || task.time < 15} >-</button>
       
       <p className="card-text">Assigned to:</p>
       <div className="btn-group">
@@ -49,12 +49,14 @@ function Task(props) {
     </div>
 
     <div className="card-body">
-      <p>Mark as completed</p>
-      <input type="checkbox" checked={task.completed} onChange={() => api.complete_task(task.id, !task.completed)} disabled={isMine} />
+      <div className="custom-control custom-checkbox">
+        <input type="checkbox" className="form-check-input custom-control-input" id={`customCheck${task.id}`} checked={task.completed} onChange={() => api.complete_task(task.id, !task.completed)} disabled={isMine} />
+        <label className="custom-control-label" htmlFor={`customCheck${task.id}`}>Mark as Completed</label>
+      </div>
     </div>
 
     <div className="card-body">
-      <button className="btn btn-primary" disabled={isMine} >Edit task</button>
+      <Link to={`/tasks/${task.id}`} disabled={isMine} ><button className="btn btn-primary" disabled={isMine} >Edit task</button></Link>
       <button className="btn btn-danger" onClick={() => api.delete_task(task.id)} disabled={isMine} >Delete</button>
     </div>
   </div>;

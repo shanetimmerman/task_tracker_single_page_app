@@ -18,8 +18,9 @@ defmodule TaskSpaWeb.Router do
 
     get "/", PageController, :index
     get "/tasks", PageController, :index
-    get "/new_user", PageController, :index
+    get "/tasks/:id", PageController, :index
     get "/new_task", PageController, :index
+    get "/new_user", PageController, :index
   end
 
   scope "/api/v1", TaskSpaWeb do

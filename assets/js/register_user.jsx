@@ -11,7 +11,7 @@ function handleSubmit(event) {
   let username = event.target[0].value
   let pass1 = event.target[1].value
   let pass2 = event.target[2].value
-  if (pass1 == pass2) {
+  if (pass1 === pass2) {
     api.create_user(username, pass1);
   }
 } 

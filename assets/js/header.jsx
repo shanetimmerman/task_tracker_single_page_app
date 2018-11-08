@@ -7,7 +7,14 @@ import api from './api';
 
 function Header(props) {
     let {session} = props
-    let login;
+    
+    let in_register = window.location.pathname.includes("/new_user");
+    
+    let register_butt;
+
+    if (!in_register) {
+        register_butt = <p><Link className="btn btn-info" to="/new_user" >Register</Link></p>
+    }
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -17,6 +24,8 @@ function Header(props) {
         api.create_session(name, password);
         return false;
     }
+    
+    let login;
 
     if (session) {
         login = 
@@ -27,11 +36,11 @@ function Header(props) {
             </div>    
     } else {
         login = 
-            <form className="form-inline my-3" onSubmit={handleSubmit}>
+            <form className="form-inline" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Username" />
                 <input type="password" placeholder="Password" />
-                <input type="submit" className="btn btn-secondary" />
-                <p><Link className="btn btn-info" to="/new_user" >Register</Link></p>
+                <button type="submit" className="btn btn-secondary" >Login</button>
+                {register_butt}
             </form>
     }
     return <div className="row my-2">

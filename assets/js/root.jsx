@@ -6,6 +6,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 
 import api from './api';
+import EditTaskForm from './edit_task';
 import Header from './header';
 import NewTaskForm from './new_task';
 import TaskList from './tasks';
@@ -41,6 +42,9 @@ class Root extends React.Component {
           } />
           <Route path="/new_task" exact={true} render={() =>
             <NewTaskForm />
+          } />
+          <Route path="/tasks/:id" exact={true} render={({ match }) =>
+            <EditTaskForm path={match.params.id} />
           } />
         </div>
       </Router>
