@@ -13,14 +13,16 @@ function handleSubmit(event) {
   let pass2 = event.target[2].value
   if (pass1 === pass2) {
     api.create_user(username, pass1);
+  } else {
+    api.show_flash("Passwords do not match");
   }
-} 
+}
 
 function RegistrationForm(props) {
   if (props.session) {
     return <Redirect to="/" />
   };
-  return <form onSubmit={handleSubmit}>      
+  return <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label>Username</label>
         <input type="text" className="form-control"></input>
@@ -30,7 +32,7 @@ function RegistrationForm(props) {
         <label>Enter Password</label>
         <input type="password" className="form-control"></input>
       </div>
-    
+
       <div className="form-group">
         <label>Confirm Password</label>
         <input type="password" className="form-control"></input>
