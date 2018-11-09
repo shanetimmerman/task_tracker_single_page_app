@@ -8,7 +8,7 @@ import { Redirect, Link } from 'react-router-dom';
 function TaskList(props) {
   let tasks = _.map(props.tasks, (task) => <Task key={"task" + task.id} task={task} users={props.users} session={props.session} />);
   return <div>
-    <Link to='/new_task' disabled={!props.session}><button className="btn btn-primary" disabled={!props.session}>Create a new task</button></Link>
+    <Link to='/new_task' onClick={() => api.hide_flash()}disabled={!props.session}><button className="btn btn-primary" disabled={!props.session}>Create a new task</button></Link>
 
     <div className="card-columns" style={{"columnCount": 3}}>
       {tasks}
@@ -37,7 +37,7 @@ function Task(props) {
       <p>Time:</p>
       <div className="row">
         <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time, session.token)} disabled={isMine} >+</button>
-        <p class="btn">{task.time}</p>
+        <p className="btn">{task.time}</p>
         <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time, session.token)} disabled={isMine || task.time < 15} >-</button>
       </div>
 
@@ -61,7 +61,7 @@ function Task(props) {
     </div>
 
     <div className="card-body">
-      <Link to={`/tasks/${task.id}`} disabled={isMine} ><button className="btn btn-primary" disabled={isMine} >Edit task</button></Link>
+      <Link to={`/tasks/${task.id}`} disabled={isMine} onClick={() => api.hide_flash()}><button className="btn btn-primary" disabled={isMine} >Edit task</button></Link>
       <button className="btn btn-danger" onClick={() => api.delete_task(task.id, session.token)} disabled={isMine} >Delete</button>
     </div>
   </div>;

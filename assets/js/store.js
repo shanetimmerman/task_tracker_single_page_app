@@ -82,11 +82,27 @@ function edit_task_form(state = {}, action) {
   }
 }
 
+function flash(state = {visible: false, message: ""}, action) {
+  switch (action.type) {
+  case 'HIDE_ERROR':
+    let state0 = $.extend({}, state);
+    state0.visible = false;
+    return state0;
+  case 'SHOW_ERROR':
+    let state1 = $.extend({}, state);
+    state1.visible = true;
+    state1.message = action.data
+    return state1;
+  default:
+    return state;
+  }
+}
+
 
 function root_reducer(state0, action) {
   console.log("reducer", state0, action);
 
-  let reducer = combineReducers({tasks, users, session, new_task_form, edit_task_form});
+  let reducer = combineReducers({tasks, users, session, new_task_form, edit_task_form, flash});
   let state1 = reducer(state0, action);
 
   console.log("reducer1", state1);

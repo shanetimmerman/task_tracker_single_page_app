@@ -4,7 +4,8 @@ defmodule TaskSpaWeb.PageController do
   def index(conn, _params) do
     tasks = TaskSpa.Tasks.list_tasks()
     |> Enum.map(&show_task/1)
-    render conn, "index.html", tasks: tasks
+    conn
+    |> render("index.html", tasks: tasks)
   end
 
   def show_task(task) do

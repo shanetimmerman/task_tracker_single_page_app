@@ -12,8 +12,6 @@ defmodule TaskSpaWeb.TaskController do
   end
 
   def create(conn, %{"task" => task_params, "token" => token}) do
-    IO.inspect(task_params)
-    IO.inspect(token)
     case Phoenix.Token.verify(TaskSpaWeb.Endpoint, "user_id", token) do
       {:ok, _} ->
         with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do

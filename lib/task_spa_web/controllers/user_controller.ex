@@ -17,11 +17,15 @@ defmodule TaskSpaWeb.UserController do
                           "password_hash",
                           Argon2.hash_pwd_salt(Map.get(user_params, "password")))
     |> Map.delete("password")
-    with {:ok, %User{} = user} <- Users.create_user(user_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+    case Users.create_user(user_params) do
+      {:ok, %User{} = user} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", Routes.user_path(conn, :show, user))
+        |> render("show.json", user: user)
+      _ ->
+        conn
+        |> send_resp(400, Jason.encode!("User name already taken"))
     end
   end
 

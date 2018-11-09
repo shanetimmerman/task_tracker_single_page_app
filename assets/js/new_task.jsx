@@ -11,7 +11,8 @@ function NewTaskForm(props) {
   let { session, users, new_task_form, dispatch } = props;
 
   if (!session) {
-    return <Redirect to={{pathname:"/", state: "Please sign in"}} />
+    api.show_flash('Please sign-in')
+    return <Redirect to="/" />
   }
 
   function handleSubmit(event) {
@@ -76,11 +77,13 @@ function NewTaskForm(props) {
     <div>
       <Link to="/" onClick={() => {
           handleSubmit();
+          api.hide_flash();
         }}
         className="btn btn-primary" >Create Task</Link>
       <Link to="/" className="btn btn-secondary" >Save and cancel</Link>
       <Link to="/" onClick={() => {
           api.clear_new_task_form();
+          api.hide_flash();
         }}
         className="btn btn-danger" >Cancel</Link>
     </div>

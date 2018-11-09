@@ -10,11 +10,12 @@ function EditTaskForm(props) {
   let { users, tasks, dispatch, edit_task_form, session } = props;
   let id_num = parseInt(window.location.pathname.substring("/tasks/".length));
 
-  if (!session || tasks.length < id_num ) {
-    return <Redirect to={{pathname:"/", state: "Please sign in"}} />
-  }
-
   let task = tasks.find((task) => task.id == id_num);
+
+  if (!session) {
+    api.show_flash('Please sign-in')
+    return <Redirect to={"/"} />
+  }
 
   if ($.isEmptyObject(edit_task_form) || edit_task_form.id != task.id) {
     let action = {
@@ -112,10 +113,15 @@ function EditTaskForm(props) {
     <div className="row container-fluid">
       <Link to="/" onClick={() => {
           handleSubmit();
+          api.hide_flash();
         }}
         className="btn btn-secondary" >Submit</Link>
 
-        <Link to="/" onClick={() => {api.fetch_tasks(); api.clear_edit_task_form(); }}
+        <Link to="/" onClick={() => {
+          api.fetch_tasks();
+          api.clear_edit_task_form();
+          api.hide_flash();
+        }}
             className="btn btn-danger">Cancel</Link>
     </div>
 

@@ -3,13 +3,16 @@ import store from './store';
 class TheServer {
 	// Sends request to the server, calls callback on the response
 	send_to_server(path, command_type, data, callback) {
-		$.ajax(path, {
+		let request = $.ajax(path, {
 			method: command_type,
 			dataType: "json",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(data),
 			success: callback,
 		});
+		request.fail(
+			(response) => this.show_flash(response.responseText)
+		);
 	}
 
 	// Helper for sending get requests
@@ -73,6 +76,8 @@ class TheServer {
 			"/api/v1/sessions",
 			{ name, password },
 			(resp) => {
+
+				console.log(resp)
 				store.dispatch({
 					type: 'NEW_SESSION',
 					data: resp.data,
@@ -187,6 +192,20 @@ class TheServer {
 			data: {
 				task: task
 			}
+		});
+	}
+
+	show_flash(message) {
+		store.dispatch({
+			type: 'SHOW_ERROR',
+			data: message
+		});
+	}
+
+	hide_flash() {
+		store.dispatch({
+			type: 'HIDE_ERROR',
+			data: ""
 		});
 	}
 }
