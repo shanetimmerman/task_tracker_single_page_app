@@ -18,9 +18,7 @@ function NewTaskForm(props) {
     if (event) {
       event.preventDefault();
     }
-    api.create_task(new_task_form.get('name'),
-                    new_task_form.get('description'),
-                    new_task_form.get('user_id'));
+    api.create_task(new_task_form, session.token);
     return false;
   }
 
@@ -35,7 +33,7 @@ function NewTaskForm(props) {
     dispatch(action);
   }
 
-  if (!new_task_form.get('user_id')) {
+  if (!new_task_form.user_id) {
     dispatchHelper('user_id', session.user_id || 1);
     dispatchHelper('user_name', session.user_name || 'alice');
   }
@@ -54,20 +52,20 @@ function NewTaskForm(props) {
     <div className="form-group row">
       <label>Task name</label>
       <input type="text" className="form-control"
-        onChange={(ev) => dispatchHelper("name", ev.target.value)} value={new_task_form.get('name')} />
+        onChange={(ev) => dispatchHelper("name", ev.target.value)} value={new_task_form.name} />
     </div>
 
     <div className="form-group row">
       <label>Description</label>
       <textarea type="doc" className="form-control" id="new-task-desc"
-        onChange={(ev) => dispatchHelper("description", ev.target.value)} value={new_task_form.get('description')} />
+        onChange={(ev) => dispatchHelper("description", ev.target.value)} value={new_task_form.description} />
     </div>
 
     <div className="form-group">
       <label>Assigned to:</label>
       <div className="btn-group">
         <button type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={!session}>
-          {new_task_form.get("user_name")}
+          {new_task_form.user_name}
         </button>
         <div className="dropdown-menu dropdown-menu-right">
           {user_options}

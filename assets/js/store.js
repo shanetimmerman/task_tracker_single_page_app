@@ -1,12 +1,13 @@
 import { createStore, combineReducers } from 'redux';
 import deepFreeze from 'deep-freeze';
+import $ from 'jquery';
 
 /*
   Application state layout
   {
     tasks: props.tasks, // List of Product
     users: [], // List of User
-    cart: [], // List of CartItem 
+    cart: [], // List of CartItem
     session: null, // { token, user_id }
     add_item_forms: new Map(), // { product_id => count }
   }
@@ -46,31 +47,46 @@ function session(state = null, action) {
   switch (action.type) {
   case 'NEW_SESSION':
     return action.data;
-  case 'DELETE_SESSION':  
+  case 'DELETE_SESSION':
     return null;
   default:
     return state;
   }
 }
 
-function new_task_form(state = new Map(), action) {
+function new_task_form(state = {}, action) {
   switch (action.type) {
   case 'UPDATE_NEW_TASK_FORM':
-    let state1 = new Map(state);
-    state1.set(action.data.key, action.data.value);
-    console.log('updated state', state1)
+    let state1 = $.extend({}, state);
+    state1[action.data.key] = action.data.value;
     return state1;
   case 'CLEAR_NEW_TASK_FORM':
-    return new Map();
+    return {};
   default:
     return state;
   }
 }
 
+function edit_task_form(state = {}, action) {
+  switch (action.type) {
+  case 'UPDATE_EDIT_TASK_FORM':
+    let state1 = $.extend({}, state);
+    state1[action.data.key] = action.data.value;
+    return state1;
+  case 'CLEAR_EDIT_TASK_FORM':
+    return {};
+  case 'LOAD_FORM_FROM_TASK':
+    return $.extend({}, action.data);
+  default:
+    return state;
+  }
+}
+
+
 function root_reducer(state0, action) {
   console.log("reducer", state0, action);
 
-  let reducer = combineReducers({tasks, users, session, new_task_form});
+  let reducer = combineReducers({tasks, users, session, new_task_form, edit_task_form});
   let state1 = reducer(state0, action);
 
   console.log("reducer1", state1);

@@ -9,7 +9,7 @@ class TheServer {
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(data),
 			success: callback,
-		  });
+		});
 	}
 
 	// Helper for sending get requests
@@ -42,12 +42,12 @@ class TheServer {
 					data: resp.data,
 				});
 			});
-		}
+	}
 
 	update_task(task_id, data, token) {
 		this.send_put(
 			`/api/v1/tasks/${task_id}`,
-			{task: data, token: token},
+			{ task: data, token: token },
 			(resp) => {
 				store.dispatch({
 					type: 'UPDATE_TASK',
@@ -64,7 +64,7 @@ class TheServer {
 
 	// Gets all the users
 	fetch_users() {
-		this.fetch_and_dispatch("/api/v1/users",'USER_LIST');
+		this.fetch_and_dispatch("/api/v1/users", 'USER_LIST');
 	}
 
 	// Creates a session
@@ -83,26 +83,20 @@ class TheServer {
 
 	// Deletes the users
 	delete_session() {
-		this.send_delete(
-			"/api/v1/sessions/1",
-			"",
-			(_resp) => {
-				store.dispatch({
-					type: "DELETE_SESSION"
-				});
-			}
-		);
+		store.dispatch({
+			type: "DELETE_SESSION"
+		});
 	}
 
 	// Updates the completed field of the task
 	complete_task(task_id, completed, token) {
 		console.log(token);
-		this.update_task(task_id, {completed: completed}, token);
+		this.update_task(task_id, { completed: completed }, token);
 	}
 
 	// Sets the task time to the given number
 	update_task_time(task_id, time, token) {
-		this.update_task(task_id, {time: time}, token);
+		this.update_task(task_id, { time: time }, token);
 	}
 
 	// Increments task time by step
@@ -117,18 +111,18 @@ class TheServer {
 
 	// Changes the user the task is assigned to
 	update_task_user(task_id, user_id, token) {
-		this.update_task(task_id, {user_id: user_id}, token);
+		this.update_task(task_id, { user_id: user_id }, token);
 	}
 
 	// Deletes the task
 	delete_task(task_id, token) {
 		this.send_delete(
 			`/api/v1/tasks/${task_id}`,
-			{token: token},
-			(resp) => {
+			{ token: token },
+			(_resp) => {
 				store.dispatch({
 					type: "DELETE_TASK",
-					data: {task_id: task_id},
+					data: { task_id: task_id },
 				});
 			}
 		)
@@ -137,8 +131,11 @@ class TheServer {
 	// Register a new user
 	create_user(username, password) {
 		this.send_post("/api/v1/users",
-					   {user: {name: username, password: password}},
-					   () => this.create_session(username, password),
+			{ user: { name: username, password: password } },
+			() => {
+				this.create_session(username, password);
+				this.fetch_users();
+			},
 		);
 	}
 
@@ -146,32 +143,50 @@ class TheServer {
 	update_new_task_form(key, value) {
 		store.dispatch({
 			type: "UPDATE_NEW_TASK_FORM",
-			data: {key: key,
-				   value: value},
+			data: {
+				key: key,
+				value: value
+			},
 		})
 	}
 
-	create_task(name, desc, user_id, token) {
+	create_task(task, token) {
 		this.send_post(
 			"/api/v1/tasks",
 			{
-				task : {
-					name: name,
-					description: desc,
-					user_id: user_id,
-				},
+				task: task,
 				token: token,
 			},
-			store.dispatch({
-				type: "CLEAR_NEW_TASK_FORM"
-			})
+			() =>
+				{store.dispatch({
+					type: "CLEAR_NEW_TASK_FORM"
+				}),
+				this.fetch_tasks();
+			}
 		);
-		this.fetch_tasks();
+
 	}
 
 	clear_new_task_form() {
 		store.dispatch({
 			type: "CLEAR_NEW_TASK_FORM",
+		});
+	}
+
+	clear_edit_task_form() {
+		store.dispatch({
+			type: "CLEAR_EDIT_TASK_FORM",
+		});
+	}
+
+
+
+	load_edit_from_from_task(task) {
+		store.dispatch({
+			type: "LOAD_FORM_FROM_TASK",
+			data: {
+				task: task
+			}
 		});
 	}
 }

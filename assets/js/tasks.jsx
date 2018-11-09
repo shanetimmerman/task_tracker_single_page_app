@@ -31,10 +31,15 @@ function Task(props) {
   return <div className="card">
     <div className="card-body">
       <h2 className="card-title">{task.name}</h2>
-      <p className="card-text">{task.description} <br/>
-                               Time: {task.time}</p>
-      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time, session.token)} disabled={isMine} >+</button>
-      <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time, session.token)} disabled={isMine || task.time < 15} >-</button>
+      <p className="card-text">{task.description}</p>
+    </div>
+    <div className="card-body">
+      <p>Time:</p>
+      <div className="row">
+        <button className="btn btn-red btn-pluss" type="button" onClick={() => api.increment_task_time(task.id, task.time, session.token)} disabled={isMine} >+</button>
+        <p class="btn">{task.time}</p>
+        <button className="btn btn-red btn-pluss" type="button" onClick={() => api.decrement_task_time(task.id, task.time, session.token)} disabled={isMine || task.time < 15} >-</button>
+      </div>
 
       <p className="card-text">Assigned to:</p>
       <div className="btn-group">
